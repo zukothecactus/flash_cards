@@ -42,6 +42,10 @@ with open('pitanja.txt', 'w') as f:
     for key,value in q_dict.items():
         f.write(f"{key}:{value}\n")
 
+file.close()
+resenja.close()
+pitanja.close()
+
 #u sustini je kao igrica
 #izbaci mi karticu i ja klikom predjem na drugu
 #pogledam odgovor ili zavrsim igru
@@ -64,7 +68,7 @@ button2_rect = pygame.Rect(3 * width // 4 - button_width // 2, button_y, button_
 
 #drawing the button
 def draw_button(rect, text):
-    pygame.draw.rect(screen, BLUE, rect)  # Draw button (blue)
+    pygame.draw.rect(screen, (80,200,120), rect)  # Draw button (blue)
     # Render the text and center it inside the button
     text_surface = font.render(text, True, WHITE)
     text_rect = text_surface.get_rect(center=rect.center)
@@ -72,11 +76,13 @@ def draw_button(rect, text):
 
 #Writing out the question
 def write_q(reci):
-    text = font.render(reci, True, BLACK)
+    fontic = pygame.font.SysFont('Times New Roman', 50)
+    text = fontic.render(reci, True, BLACK)
     text_rect = text.get_rect(center=(width//2, height//3))
     screen.blit(text, text_rect)
 
-#run time lol
+random_text = 'Pitanja'
+answer_key = -1
 running = True
 while running:
     # Event handling
@@ -85,24 +91,29 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_pos = pygame.mouse.get_pos()  # Get mouse position
-            # Check if mouse is inside the button1 rectangle
+            
             if button1_rect.collidepoint(mouse_pos):
                 print("Sledece pitanje!")
-                # random_broj = random.randint(1, q_count)
-                # reci = q_dict[random_broj]
-            # Check if mouse is inside the button2 rectangle
+                random_key = random.choice(list(q_dict.keys()))
+                answer_key = random_key
+                random_text = q_dict[random_key]
+                
             if button2_rect.collidepoint(mouse_pos):
-                print("Odgovor na pitanje!")
+                if(answer_key != -1):
+                    print("Odgovor na pitanje!")
+                    random_text = a_dict[answer_key]
+                else:
+                    print("Morate ucitati neko pitanje")
 
     # Fill the screen with white background
-    screen.fill(WHITE)
+    screen.fill((255, 229, 180))
 
     # Draw the buttons
     draw_button(button1_rect, 'Next')
     draw_button(button2_rect, 'Answer')
     random_broj = random.randint(1, q_count)
     
-    write_q("pitanje")
+    write_q(random_text.strip())
 
     # Update the display
     pygame.display.update()
@@ -112,23 +123,6 @@ sys.exit()
 
 #generating a image to put a question onto
 
-
-
-i = 1
-while i<=q_count:
-    random_broj = random.randint(1, q_count)
-    ulaz = input()
-    if ulaz =="n":
-        print(q_dict[random_broj])
-        i+=1
-    elif ulaz == "a":
-        print(a_dict[random_broj])
-    else: 
-        print("Kraj\n")
-        break
-file.close()
-resenja.close()
-pitanja.close()
 
         
 
